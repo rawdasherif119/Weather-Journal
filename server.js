@@ -1,5 +1,5 @@
 // Required packages for app
-const cors = require('dotenv');
+const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -13,4 +13,8 @@ app.use(bodyParser.json());
 // Cors for cross origin allowance
 app.use(cors());
 
+//Listen to server
+app.listen(process.env.PORT, () => {
+    console.log(`listen to server successfully to port : ${process.env.PORT}`)
+});
 
