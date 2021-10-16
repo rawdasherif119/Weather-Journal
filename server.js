@@ -1,4 +1,6 @@
 // Required packages for app
+const cors = require('dotenv');
+dotenv.config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
