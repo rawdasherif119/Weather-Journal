@@ -17,4 +17,6 @@ app.use(cors());
 app.listen(process.env.PORT, () => {
     console.log(`listen to server successfully to port : ${process.env.PORT}`)
 });
+// Initialize the main project folder
+app.use(express.static('website'));
 
