@@ -24,9 +24,14 @@ app.use(express.static('website'));
 /** General App variable */
 let projectData = {};
 
-/* Api */ 
+/* Apis */ 
 /** Post api to add new data to project data  */
 app.post('/add', function (request, response) {
-    projectData = request.body
+    projectData = request.body;
+    response.status(200).send(projectData);
+});
+
+/** Get api to get project data  */
+app.get('/getData', function (request, response) {
     response.status(200).send(projectData);
 });

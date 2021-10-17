@@ -3,7 +3,6 @@ document.getElementById('getWeather-btn').addEventListener('click', handleData);
 
 /******* **********************************************************************/
 /** Functions */
-
 function handleData(event) {
     zipCode = checkAndGetZipCode();
     if (zipCode){
@@ -42,7 +41,9 @@ const retriveWeather = async (zipCode, countryCode) => {
 /** Add and retrived new data function */
 const addRetrivedWeather = (data, zipCode) => {
     data = prepareNewData(data, zipCode);
-    generalPostMethod('/add',data);
+    postMethod('/add',data).then(
+         drawNewWeatherData()
+    );
 }
 
 /** Prepare new data to add it to project data */
@@ -58,12 +59,58 @@ function prepareNewData(data, zipCode) {
     };
 }
 
-/**
- * @description General post method 
- * @param {string}  URL
- * @param {object}  data
- */
-const generalPostMethod = async (url = '', data = '') => {
+/** Draw ui weather data */
+const  drawNewWeatherData =async () =>{
+    await fetch('/getData')
+        .then(function (resp) {return resp.json()})
+            .then(function (data) {
+                 if (data.zipCode) {
+                    drawDiv = document.getElementById('drawDiv');
+                    drawDiv.innerHTML = '';
+                    innerDiv = document.createElement('div');
+                    innerDiv.className = "inner";                    
+                    //Display Zip Code
+                    zipElement = document.createElement('h4');
+                    zipElement.textContent = 'Zip:  ' + data.zipCode;
+                    innerDiv.appendChild(zipElement);
+                    //Display Country code 
+                    countryCodeElement = document.createElement('h4');
+                    countryCodeElement.textContent = 'Country code: '+ data.countryCode;
+                    innerDiv.appendChild(countryCodeElement);
+                    //Display name
+                    nameElement = document.createElement('h4');
+                    nameElement.textContent = 'Name:  '+data.name;
+                    innerDiv.appendChild(nameElement);
+                    //Display temp
+                    tempElement = document.createElement('h4');
+                    tempElement.textContent = 'Temp:  ' +data.temp;
+                    innerDiv.appendChild(tempElement);
+                    //Diplay description
+                    descriptionElement = document.createElement('h4');
+                    descriptionElement.textContent = 'Description:  ' + data.description;
+                    innerDiv.appendChild(descriptionElement);
+                    // Display date
+                    dateElement = document.createElement('h4');
+                    dateElement.textContent = 'Date:  ' + data.date;
+                    innerDiv.appendChild(dateElement);
+                    //Display content
+                    if(data.content){
+                      contentElement = document.createElement('h4');
+                      contentElement.textContent = 'Content:  ' + data.content;
+                      innerDiv.appendChild(contentElement);
+                    }
+                    drawDiv.appendChild(innerDiv);
+                 }
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+
+
+}
+
+/**General Post Method Data*/
+const postMethod = async (url = '', data = '') => {
     const response = await fetch(url, {
         method: 'POST',
         credentials: 'same-origin',
