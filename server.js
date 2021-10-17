@@ -20,3 +20,13 @@ app.listen(process.env.PORT, () => {
 // Initialize the main project folder
 app.use(express.static('website'));
 
+/* ************************************************************ */
+/** General App variable */
+let projectData = {};
+
+/* Api */ 
+/** Post api to add new data to project data  */
+app.post('/add', function (request, response) {
+    projectData = request.body
+    response.status(200).send(projectData);
+});
