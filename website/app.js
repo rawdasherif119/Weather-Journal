@@ -1,3 +1,6 @@
+const apikey = '5cec774feeecae7ce6a902b66a72c634';
+const unit = 'metric'
+
 /** Listen to get Weather Button */
 document.getElementById('getWeather-btn').addEventListener('click', handleData);
 
@@ -23,8 +26,7 @@ function checkAndGetZipCode()
 
 /** Retrive weather data from open weather map  */
 const retriveWeather = async (zipCode, countryCode) => {
-    apikey = '5cec774feeecae7ce6a902b66a72c634';
-    await (fetch(`https:api.openweathermap.org/data/2.5/weather?zip=${zipCode},${countryCode}&&appid=${apikey}`))
+    await (fetch(`https:api.openweathermap.org/data/2.5/weather?zip=${zipCode},${countryCode}&&appid=${apikey}&&units=${unit}`))
         .then(function (resp) { return resp.json() }) // Convert data to json
         .then(function (data) {
             if (data.cod != 200) {
@@ -41,7 +43,7 @@ const retriveWeather = async (zipCode, countryCode) => {
 /** Add and retrived new data function */
 const addRetrivedWeather = (data, zipCode) => {
     data = prepareNewData(data, zipCode);
-    postMethod('/add',data).then(
+    postMethod('http:localhost:3000/add', data).then(
          drawNewWeatherData()
     );
 }
@@ -51,7 +53,7 @@ function prepareNewData(data, zipCode) {
     return {
         zipCode: zipCode,
         countryCode: data.sys.country,
-        temp: Math.round(parseFloat(data.main.temp) - 273.15),
+        temp: data.main.temp,
         date: new Date(),
         content: document.getElementById('feelings').value,
         description: data.weather[0].description,
@@ -61,7 +63,7 @@ function prepareNewData(data, zipCode) {
 
 /** Draw ui weather data */
 const  drawNewWeatherData =async () =>{
-    await fetch('/getData')
+    await fetch('http:localhost:3000/getData')
         .then(function (resp) {return resp.json()})
             .then(function (data) {
                  if (data.zipCode) {
